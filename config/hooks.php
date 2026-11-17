@@ -11,8 +11,22 @@
 
 declare(strict_types=1);
 
+use Coverage\Admin\ProductFields;
+use Coverage\Admin\SettingsPage;
+use Coverage\Cart\CartArea;
+use Coverage\Frontend\ProductPage;
+use Coverage\Product\PricePerAreaSync;
+use Coverage\Sample\SampleProduct;
+use Coverage\Sample\Samples;
+
 defined('ABSPATH') || exit;
 
 return [
-    // WaitlistService::class,
+    SettingsPage::class,
+    ProductFields::class,
+    PricePerAreaSync::class,
+    ProductPage::class,
+    CartArea::class,
+    SampleProduct::class,
+    Samples::class,
 ];
