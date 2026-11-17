@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PluginNamespace;
+namespace Coverage;
 
-use PluginNamespace\Contract\HasHooks;
+use Coverage\Contract\HasHooks;
 
 defined('ABSPATH') || exit;
 
@@ -55,6 +55,6 @@ final class Plugin
          *
          * @param Plugin $plugin The booted plugin instance.
          */
-        do_action('plugin-slug/booted', $this);
+        do_action('coverage/booted', $this);
     }
 }

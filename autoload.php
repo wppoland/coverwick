@@ -1,40 +1,32 @@
 <?php
 /**
- * Autoloading: prefer Composer's vendor autoloader (ships the storefront-kit and
- * the optimized classmap). Fall back to a minimal PSR-4 autoloader so the plugin
- * still boots if vendor/ is somehow absent.
+ * Autoloading: prefer Composer's vendor autoloader (optimized classmap) and
+ * fall back to a minimal PSR-4 autoloader so the plugin still boots if vendor/
+ * is absent.
  *
- * @package PluginNamespace
+ * @package Coverage
  */
 
 declare(strict_types=1);
 
-namespace PluginNamespace;
+namespace Coverage;
 
 defined('ABSPATH') || exit;
 
-$plugin_slug_composer = __DIR__ . '/vendor/autoload.php';
-if (is_readable($plugin_slug_composer)) {
-    require_once $plugin_slug_composer;
+$coverage_composer = __DIR__ . '/vendor/autoload.php';
+if (is_readable($coverage_composer)) {
+    require_once $coverage_composer;
     return;
 }
 
 spl_autoload_register(static function (string $class): void {
-    $prefixes = [
-        'PluginNamespace\\'           => __DIR__ . '/src/',
-        'WPPoland\\StorefrontKit\\'    => __DIR__ . '/vendor/wppoland/storefront-kit/src/',
-    ];
-
-    foreach ($prefixes as $prefix => $baseDir) {
-        $len = strlen($prefix);
-        if (strncmp($prefix, $class, $len) !== 0) {
-            continue;
-        }
-        $relative = substr($class, $len);
-        $file     = $baseDir . str_replace('\\', '/', $relative) . '.php';
-        if (is_readable($file)) {
-            require_once $file;
-        }
+    $prefix = 'Coverage\\';
+    $len    = strlen($prefix);
+    if (strncmp($prefix, $class, $len) !== 0) {
         return;
+    }
+    $file = __DIR__ . '/src/' . str_replace('\\', '/', substr($class, $len)) . '.php';
+    if (is_readable($file)) {
+        require_once $file;
     }
 });

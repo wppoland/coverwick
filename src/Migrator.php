@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PluginNamespace;
+namespace Coverage;
 
 defined('ABSPATH') || exit;
 
@@ -12,7 +12,7 @@ defined('ABSPATH') || exit;
  */
 final class Migrator
 {
-    private const OPTION = 'plugin_slug_db_version';
+    private const OPTION = 'coverage_db_version';
 
     public function maybeMigrate(): void
     {

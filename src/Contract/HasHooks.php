@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PluginNamespace\Contract;
+namespace Coverage\Contract;
 
 defined('ABSPATH') || exit;
 

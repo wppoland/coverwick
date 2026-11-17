@@ -1,4 +1,4 @@
-=== PLUGIN_NAME ===
+=== Coverage Calculator ===
 Contributors: motylanogha
 Tags: woocommerce
 Requires at least: 6.5
@@ -8,27 +8,27 @@ Stable tag: 0.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-PLUGIN_SHORT_DESCRIPTION
+Sell boards, panels and tiles by area: linked pieces and square metre inputs, price per square metre and paid samples.
 
 == Description ==
 
-PLUGIN_DESCRIPTION
+Sell boards, panels and tiles by area: linked pieces and square metre inputs, price per square metre and paid samples.
 
-== PLUGIN_NAME Pro ==
+== Coverage Calculator Pro ==
 
-PLUGIN_NAME Pro is a separate paid plugin that works on top of PLUGIN_NAME. It adds:
+Coverage Calculator Pro is a separate paid plugin that works on top of Coverage Calculator. It adds:
 
 * PRO_FEATURE_TITLE
 
 The free edition is not a trial and its features stay available without a time limit.
 
-* **PLUGIN_NAME Pro** - [plogins.com/plugin-slug-pro/](https://plogins.com/plugin-slug-pro/)
-* **Compare editions and pricing** - [plogins.com/plugin-slug-pro/pricing/](https://plogins.com/plugin-slug-pro/pricing/)
-* **PRO documentation** - [plogins.com/plugin-slug-pro/docs/](https://plogins.com/plugin-slug-pro/docs/)
+* **Coverage Calculator Pro** - [plogins.com/coverage-pro/](https://plogins.com/coverage-pro/)
+* **Compare editions and pricing** - [plogins.com/coverage-pro/pricing/](https://plogins.com/coverage-pro/pricing/)
+* **PRO documentation** - [plogins.com/coverage-pro/docs/](https://plogins.com/coverage-pro/docs/)
 
 == Installation ==
 
-1. Upload the plugin to `/wp-content/plugins/plugin-slug`, or install via Plugins → Add New.
+1. Upload the plugin to `/wp-content/plugins/coverage`, or install via Plugins → Add New.
 2. Activate it. WooCommerce must be active.
 
 == Frequently Asked Questions ==
@@ -39,7 +39,7 @@ Yes.
 
 == Screenshots ==
 
-1. PLUGIN_SCREENSHOT_1_CAPTION
+1. Coverage Calculator in action.
 
 == Changelog ==
 

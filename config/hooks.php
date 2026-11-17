@@ -2,9 +2,9 @@
 /**
  * Boot order: services listed here are resolved from the container and have
  * their registerHooks() called during Plugin::boot(). Each must implement
- * PluginNamespace\Contract\HasHooks.
+ * Coverage\Contract\HasHooks.
  *
- * @package PluginNamespace
+ * @package Coverage
  *
  * @return array<class-string>
  */

@@ -9,14 +9,7 @@ jobs:
   ci:
     uses: wppoland/workflows/.github/workflows/_php-ci.yml@v1
     with:
-      # The checkout directory is what wp-env mounts the plugin as, and what
-      # `wp plugin activate` and `wp plugin check` are then given. In this repo
-      # that is plugin-template, not the plugin-slug placeholder in the file
-      # name, which is why Plugin Check had been failing here since June with
-      # "The 'plugin-slug' plugin could not be found". A plugin made from this
-      # template lives in a directory named after itself, so it sets its own
-      # slug here and the two agree again.
-      slug: plugin-template
+      slug: coverage
       has-js: false
       run-i18n: false
       run-playwright: false
