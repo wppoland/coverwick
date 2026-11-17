@@ -38,7 +38,7 @@ final class ProductFields implements HasHooks
 
         woocommerce_wp_text_input([
             'id'          => Area::META_PER_UNIT,
-            /* translators: %s: area unit, e.g. m² */
+            /* translators: %s: area unit, e.g. m2 */
             'label'       => sprintf(__('Coverage per unit (%s)', 'coverage'), $this->settings->unit()),
             'description' => __('Area one sellable unit covers, e.g. 0.76 for a board. Variations without their own value use this one. Leave empty to turn the calculator off.', 'coverage'),
             'desc_tip'    => true,
@@ -70,15 +70,15 @@ final class ProductFields implements HasHooks
     public function saveGeneral(\WC_Product $product): void
     {
         // phpcs:disable WordPress.Security.NonceVerification.Missing -- verified by WooCommerce (woocommerce_meta_nonce).
-        $perUnit = isset($_POST[Area::META_PER_UNIT]) ? wc_clean(wp_unslash((string) $_POST[Area::META_PER_UNIT])) : '';
-        $price   = isset($_POST[Area::META_SAMPLE_PRICE]) ? wc_clean(wp_unslash((string) $_POST[Area::META_SAMPLE_PRICE])) : '';
+        $perUnit = isset($_POST[Area::META_PER_UNIT]) ? sanitize_text_field(wp_unslash($_POST[Area::META_PER_UNIT])) : '';
+        $price   = isset($_POST[Area::META_SAMPLE_PRICE]) ? sanitize_text_field(wp_unslash($_POST[Area::META_SAMPLE_PRICE])) : '';
         $sample  = isset($_POST[Area::META_SAMPLE]);
         // phpcs:enable
 
-        $this->setPerUnit($product, is_string($perUnit) ? $perUnit : '');
+        $this->setPerUnit($product, $perUnit);
         $product->update_meta_data(Area::META_SAMPLE, $sample ? 'yes' : 'no');
 
-        $price = is_string($price) ? trim($price) : '';
+        $price = trim($price);
         if ($price === '') {
             $product->delete_meta_data(Area::META_SAMPLE_PRICE);
         } else {
@@ -97,7 +97,7 @@ final class ProductFields implements HasHooks
             'id'            => 'coverage_per_unit_' . $loop,
             'name'          => 'coverage_per_unit[' . $loop . ']',
             'value'         => is_scalar($value) ? wc_format_localized_decimal((string) $value) : '',
-            /* translators: %s: area unit, e.g. m² */
+            /* translators: %s: area unit, e.g. m2 */
             'label'         => sprintf(__('Coverage per unit (%s)', 'coverage'), $this->settings->unit()),
             'placeholder'   => __('Same as parent', 'coverage'),
             'desc_tip'      => true,
@@ -110,8 +110,8 @@ final class ProductFields implements HasHooks
     public function saveVariation(\WC_Product_Variation $variation, int $index): void
     {
         // phpcs:ignore WordPress.Security.NonceVerification.Missing -- verified by WooCommerce (save-variations).
-        $raw = isset($_POST['coverage_per_unit'][$index]) ? wc_clean(wp_unslash((string) $_POST['coverage_per_unit'][$index])) : '';
-        $this->setPerUnit($variation, is_string($raw) ? $raw : '');
+        $raw = isset($_POST['coverage_per_unit'][$index]) ? sanitize_text_field(wp_unslash($_POST['coverage_per_unit'][$index])) : '';
+        $this->setPerUnit($variation, $raw);
     }
 
     private function setPerUnit(\WC_Product $product, string $raw): void

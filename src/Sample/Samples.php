@@ -84,7 +84,7 @@ final class Samples implements HasHooks
         ?>
         <form class="coverage-sample" method="post" action="<?php echo esc_url((string) get_permalink($product->get_id())); ?>">
             <input type="hidden" name="coverage_sample" value="<?php echo esc_attr((string) $product->get_id()); ?>" />
-            <button type="submit" class="button coverage-sample__button"><?php echo wp_kses_post($label); ?></button>
+            <button type="submit" class="button wp-element-button coverage-sample__button"><?php echo wp_kses_post($label); ?></button>
         </form>
         <?php
     }

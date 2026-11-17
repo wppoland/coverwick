@@ -95,7 +95,7 @@ final class Calculator
     }
 
     /**
-     * Render a typed unit: a trailing 2 or 3 becomes a superscript ("m2" is "m²").
+     * Render a typed unit: a trailing 2 or 3 becomes a superscript ("m2" gets a superscript 2).
      */
     public static function displayUnit(string $unit): string
     {

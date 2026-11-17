@@ -89,7 +89,7 @@ final class ProductPage implements HasHooks
             <p class="coverage-calc__hint">
                 <?php
                 printf(
-                    /* translators: 1: area one piece covers, e.g. 0,76 2: area unit, e.g. m² */
+                    /* translators: 1: area one piece covers, e.g. 0,76 2: area unit, e.g. m2 */
                     esc_html__('1 pc = %1$s %2$s. Enter the number of pieces or the area, the other value is calculated. Area is rounded up to a whole piece.', 'coverage'),
                     '<span class="coverage-calc__per-unit">' . esc_html(Format::perUnit($perUnit)) . '</span>',
                     esc_html($this->settings->unit()),
@@ -116,9 +116,9 @@ final class ProductPage implements HasHooks
         }
 
         $label = $product->is_type('variable')
-            /* translators: 1: formatted price, 2: area unit, e.g. m² */
+            /* translators: 1: formatted price, 2: area unit, e.g. m2 */
             ? __('from %1$s / %2$s', 'coverage')
-            /* translators: 1: formatted price, 2: area unit, e.g. m² */
+            /* translators: 1: formatted price, 2: area unit, e.g. m2 */
             : __('%1$s / %2$s', 'coverage');
 
         return $html . ' <span class="coverage-unit-price">' . sprintf(esc_html($label), wc_price($value), esc_html($this->settings->unit())) . '</span>';

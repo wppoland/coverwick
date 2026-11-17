@@ -80,8 +80,8 @@ final class CartArea implements HasHooks
     {
         $area = self::areaOf($values);
         if ($area > 0) {
-            $item->add_meta_data(self::ORDER_META, wc_format_decimal($area, Calculator::PRECISION), true);
-            $item->add_meta_data(self::ORDER_META_PER, wc_format_decimal((float) $values[self::CART_KEY], Calculator::PRECISION), true);
+            $item->add_meta_data(self::ORDER_META, wc_format_decimal($area, Calculator::PRECISION, true), true);
+            $item->add_meta_data(self::ORDER_META_PER, wc_format_decimal((float) $values[self::CART_KEY], Calculator::PRECISION, true), true);
         }
     }
 

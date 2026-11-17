@@ -3,7 +3,8 @@
  * (pieces) and fills variation fields into the sample form. No dependencies.
  *
  * Dispatches a bubbling `coverage:change` CustomEvent from the calculator box
- * with detail { area, pieces, perUnit, price, productId, variationId }.
+ * with detail { area, pieces, perUnit, price, productId, variationId }; the
+ * latest detail is also kept as `coverageState` on the box element.
  */
 (function () {
 	'use strict';
@@ -16,7 +17,7 @@
 	}
 
 	function parse(raw) {
-		var s = String(raw || '').replace(/[\s  ]/g, '');
+		var s = String(raw || '').replace(/[\s\u00a0\u202f]/g, '');
 		if (s.indexOf(',') !== -1 && s.indexOf('.') !== -1) {
 			s = s.lastIndexOf(',') > s.lastIndexOf('.') ? s.replace(/\./g, '').replace(',', '.') : s.replace(/,/g, '');
 		} else {
@@ -66,17 +67,16 @@
 		}
 
 		function emit() {
-			box.dispatchEvent(new CustomEvent('coverage:change', {
-				bubbles: true,
-				detail: {
-					area: areaFor(pieces(), state.perUnit),
-					pieces: pieces(),
-					perUnit: state.perUnit,
-					price: state.price,
-					productId: parseInt(box.dataset.productId, 10) || 0,
-					variationId: state.variationId
-				}
-			}));
+			// Kept on the box too, so scripts that start later can read the current state.
+			box.coverageState = {
+				area: areaFor(pieces(), state.perUnit),
+				pieces: pieces(),
+				perUnit: state.perUnit,
+				price: state.price,
+				productId: parseInt(box.dataset.productId, 10) || 0,
+				variationId: state.variationId
+			};
+			box.dispatchEvent(new CustomEvent('coverage:change', { bubbles: true, detail: box.coverageState }));
 		}
 
 		function fromQuantity() {
