@@ -13,8 +13,9 @@ defined('ABSPATH') || exit;
  * The hidden internal product every sample cart line points at.
  *
  * Created on first use and recreated if it was trashed or deleted. It is
- * published (WooCommerce only sells published products) but hidden from the
- * catalogue, search and sitemaps, and its own page redirects to the shop.
+ * published (WooCommerce only sells published products) but kept out of every
+ * front-end and REST product query: catalogue, search, feeds, the core sitemap,
+ * /wp/v2/product and the Store API listing. Its own URL therefore 404s.
  */
 final class SampleProduct implements HasHooks
 {
@@ -29,8 +30,8 @@ final class SampleProduct implements HasHooks
 
     public function registerHooks(): void
     {
-        add_action('template_redirect', [$this, 'redirectSinglePage']);
-        add_filter('wp_sitemaps_posts_query_args', [$this, 'excludeFromSitemap'], 10, 2);
+        add_action('pre_get_posts', [$this, 'excludeFromQueries']);
+        add_filter('wpseo_exclude_from_sitemap_by_post_ids', [$this, 'excludeFromYoastSitemap']);
     }
 
     /**
@@ -78,31 +79,41 @@ final class SampleProduct implements HasHooks
         $product->update_meta_data(self::FLAG, 'yes');
         $id = $product->save();
 
-        update_option(self::OPTION, $id, false);
+        update_option(self::OPTION, $id, true);
 
         return $this->cached = $id;
     }
 
-    public function redirectSinglePage(): void
+    /**
+     * Front-end, REST and cron product queries never return the internal
+     * product. wp-admin keeps it visible so the merchant can still find it.
+     */
+    public function excludeFromQueries(\WP_Query $query): void
     {
-        if (is_singular('product') && $this->isSample((int) get_queried_object_id())) {
-            wp_safe_redirect(wc_get_page_permalink('shop'));
-            exit;
+        if (is_admin() && ! wp_doing_ajax()) {
+            return;
+        }
+        $types = (array) $query->get('post_type');
+        $hit   = array_intersect($types, ['product', 'any']) !== []
+            || ($query->is_search() && array_filter($types) === []);
+        if (! $hit) {
+            return;
+        }
+        $id = $this->existingId();
+        if ($id > 0) {
+            $exclude = (array) $query->get('post__not_in');
+            $query->set('post__not_in', array_merge($exclude, [$id]));
         }
     }
 
     /**
-     * @param array<string, mixed> $args
-     * @return array<string, mixed>
+     * @param array<int, int>|mixed $ids
+     * @return array<int, int>|mixed
      */
-    public function excludeFromSitemap(array $args, string $postType): array
+    public function excludeFromYoastSitemap($ids)
     {
         $id = $this->existingId();
-        if ($postType === 'product' && $id > 0) {
-            $exclude              = isset($args['post__not_in']) && is_array($args['post__not_in']) ? $args['post__not_in'] : [];
-            $args['post__not_in'] = array_merge($exclude, [$id]);
-        }
 
-        return $args;
+        return $id > 0 && is_array($ids) ? array_merge($ids, [$id]) : $ids;
     }
 }

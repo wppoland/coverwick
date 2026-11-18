@@ -34,7 +34,12 @@ final class Samples implements HasHooks
 
     public function registerHooks(): void
     {
-        add_action('woocommerce_after_add_to_cart_form', [$this, 'renderButton']);
+        // After each product type's add-to-cart template, outside its form: the
+        // action fires for out-of-stock products too (samples do not depend on
+        // stock) and in block and page-builder templates that render that form.
+        foreach (array_keys(wc_get_product_types()) as $type) {
+            add_action('woocommerce_' . $type . '_add_to_cart', [$this, 'renderButton'], 35);
+        }
         add_action('wp_loaded', [$this, 'handleForm'], 20);
         add_filter('woocommerce_add_to_cart_validation', [$this, 'blockDirectAdd'], 1, 2);
         add_filter('woocommerce_add_cart_item', [$this, 'applyToLine'], 20);
@@ -49,13 +54,16 @@ final class Samples implements HasHooks
     }
 
     /**
-     * Samples are on globally and the (parent) product has them switched on.
+     * Samples are on globally and the published (parent) product has them switched on.
      */
     public function available(\WC_Product $product): bool
     {
         $source = $this->sourceOf($product);
 
-        return $source !== null && $this->settings->samplesEnabled() && $source->get_meta(Area::META_SAMPLE, true) === 'yes';
+        return $source !== null
+            && $this->settings->samplesEnabled()
+            && $source->get_status() === 'publish'
+            && $source->get_meta(Area::META_SAMPLE, true) === 'yes';
     }
 
     public function priceFor(\WC_Product $product): float
@@ -64,6 +72,17 @@ final class Samples implements HasHooks
         $override = (string) $source->get_meta(Area::META_SAMPLE_PRICE, true);
 
         return $override !== '' ? max(0.0, (float) $override) : $this->settings->samplePrice();
+    }
+
+    /**
+     * Sample price as the shop displays prices (incl. or excl. tax), taxed like
+     * the internal product the cart line is charged as.
+     */
+    public function displayPrice(\WC_Product $product): float
+    {
+        $sample = wc_get_product($this->sampleProduct->id());
+
+        return (float) wc_get_price_to_display($sample instanceof \WC_Product ? $sample : $product, ['price' => $this->priceFor($product)]);
     }
 
     public function renderButton(): void
@@ -79,7 +98,7 @@ final class Samples implements HasHooks
         $label = sprintf(
             /* translators: %s: formatted sample price, e.g. 4,00 zl */
             __('Order a sample of this colour (%s)', 'coverage'),
-            wc_price($this->priceFor($product)),
+            wc_price($this->displayPrice($product)),
         );
         ?>
         <form class="coverage-sample" method="post" action="<?php echo esc_url((string) get_permalink($product->get_id())); ?>">
@@ -137,14 +156,13 @@ final class Samples implements HasHooks
 
         $attributes = [];
         if ($source->is_type('variable')) {
-            $variation = wc_get_product($variationId);
-            if (! $variation instanceof \WC_Product_Variation || $variation->get_parent_id() !== $sourceId) {
+            $variation  = wc_get_product($variationId);
+            $attributes = $variation instanceof \WC_Product_Variation && $variation->get_parent_id() === $sourceId && $variation->get_status() === 'publish'
+                ? Area::variationAttributes($variation, $postedAttributes)
+                : null;
+            if ($attributes === null) {
                 wc_add_notice(__('Choose the product options first, then order a sample of that variant.', 'coverage'), 'error');
                 return false;
-            }
-            foreach ($variation->get_variation_attributes() as $key => $value) {
-                // "Any" attributes are empty on the variation: take the shopper's choice.
-                $attributes[$key] = $value !== '' ? $value : (string) ($postedAttributes[$key] ?? '');
             }
         } else {
             $variationId = 0;
@@ -152,7 +170,7 @@ final class Samples implements HasHooks
 
         $lines = $this->lines();
         foreach ($lines as $line) {
-            if ((int) $line['source'] === $sourceId && (int) $line['variation'] === $variationId) {
+            if ((int) $line['source'] === $sourceId && (int) $line['variation'] === $variationId && ($line['attributes'] ?? []) === $attributes) {
                 wc_add_notice(__('A sample of this product is already in your cart.', 'coverage'), 'notice');
                 return false;
             }
@@ -243,14 +261,16 @@ final class Samples implements HasHooks
     }
 
     /**
-     * Remove sample lines whose source vanished or that were added without one.
+     * Remove sample lines added without a source, or whose source vanished or
+     * no longer offers samples.
      */
     public function dropInvalidLines(\WC_Cart $cart): void
     {
         foreach ($cart->get_cart() as $key => $item) {
             $isSampleProduct = $this->sampleProduct->isSample((int) $item['product_id']);
             $hasSource       = isset($item[self::CART_KEY]);
-            if (($isSampleProduct || $hasSource) && $this->lineSource($item) === null) {
+            $source          = $this->lineSource($item);
+            if (($isSampleProduct || $hasSource) && ($source === null || ! $this->available($source))) {
                 $cart->remove_cart_item($key);
             }
         }

@@ -36,6 +36,19 @@ final class CartArea implements HasHooks
         add_filter('woocommerce_get_item_data', [$this, 'itemData'], 10, 2);
         add_action('woocommerce_checkout_create_order_line_item', [$this, 'saveOrderItem'], 10, 3);
         add_filter('woocommerce_order_item_get_formatted_meta_data', [$this, 'formattedMeta'], 10, 2);
+        add_filter('woocommerce_hidden_order_itemmeta', [$this, 'hiddenMeta']);
+    }
+
+    /**
+     * The order screen lists underscore meta too: keep the raw values out, the
+     * readable "Area" row from formattedMeta() stays.
+     *
+     * @param array<int, string> $keys
+     * @return array<int, string>
+     */
+    public function hiddenMeta(array $keys): array
+    {
+        return array_merge($keys, [self::ORDER_META, self::ORDER_META_PER, '_coverage_sample_source', '_coverage_sample_variation']);
     }
 
     /**
@@ -97,7 +110,7 @@ final class CartArea implements HasHooks
         $area = (float) $item->get_meta(self::ORDER_META, true);
         if ($area > 0) {
             $formatted['coverage_area'] = (object) [
-                'key'           => self::ORDER_META,
+                'key'           => 'coverage_area',
                 'value'         => (string) $area,
                 'display_key'   => __('Area', 'coverage'),
                 'display_value' => esc_html(Format::area($area) . ' ' . $this->settings->unit()),

@@ -79,6 +79,38 @@ final class Area
     }
 
     /**
+     * Attributes for a variation cart line: fixed values come from the
+     * variation, "any" values from the shopper and must be one of the parent's
+     * options. Null when a choice is missing or not offered.
+     *
+     * @param array<string, mixed> $posted attribute_* values from the product form.
+     * @return array<string, string>|null
+     */
+    public static function variationAttributes(\WC_Product_Variation $variation, array $posted): ?array
+    {
+        $parent  = wc_get_product($variation->get_parent_id());
+        $options = [];
+        if ($parent instanceof \WC_Product_Variable) {
+            foreach ($parent->get_variation_attributes() as $name => $values) {
+                $options['attribute_' . sanitize_title((string) $name)] = array_map('strval', (array) $values);
+            }
+        }
+
+        $out = [];
+        foreach ($variation->get_variation_attributes() as $key => $value) {
+            if ($value === '') {
+                $value = is_scalar($posted[$key] ?? null) ? (string) $posted[$key] : '';
+                if ($value === '' || ! in_array($value, $options[$key] ?? [], true)) {
+                    return null;
+                }
+            }
+            $out[(string) $key] = (string) $value;
+        }
+
+        return $out;
+    }
+
+    /**
      * @return list<\WC_Product>
      */
     public static function variations(\WC_Product $product): array

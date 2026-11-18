@@ -27,6 +27,10 @@ final class PricePerAreaSync implements HasHooks
         // Admin variation save writes our meta during processing; the variable
         // product's children cache is only reset after all variations are saved.
         add_action('woocommerce_ajax_save_product_variations', [$this, 'sync'], 20);
+        // A deleted, trashed or restored variation changes the parent's lowest value.
+        add_action('deleted_post', [$this, 'syncAfterDelete'], 20, 2);
+        add_action('trashed_post', [$this, 'syncAfterStatusChange'], 20);
+        add_action('untrashed_post', [$this, 'syncAfterStatusChange'], 20);
         // Scheduled sales: WC saves each product, these catch the batch afterwards.
         add_action('wc_after_products_starting_sales', [$this, 'syncMany'], 20);
         add_action('wc_after_products_ending_sales', [$this, 'syncMany'], 20);
@@ -37,6 +41,20 @@ final class PricePerAreaSync implements HasHooks
         $parentId = (int) wp_get_post_parent_id($variationId);
         if ($parentId > 0) {
             $this->sync($parentId);
+        }
+    }
+
+    public function syncAfterDelete(int $postId, ?\WP_Post $post = null): void
+    {
+        if ($post instanceof \WP_Post && $post->post_type === 'product_variation' && $post->post_parent > 0) {
+            $this->sync((int) $post->post_parent);
+        }
+    }
+
+    public function syncAfterStatusChange(int $postId): void
+    {
+        if (get_post_type($postId) === 'product_variation') {
+            $this->syncParentOf($postId);
         }
     }
 

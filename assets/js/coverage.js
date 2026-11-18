@@ -59,8 +59,13 @@
 			variations = JSON.parse(box.dataset.variations || '{}');
 		} catch (e) {}
 
-		var state = { perUnit: basePerUnit, price: basePrice, variationId: 0 };
+		var variationField = form.querySelector('input[name="variation_id"]');
+		// A variable product has no area until a variation is chosen: the
+		// parent value may not match the variation the shopper will pick.
+		var state = { perUnit: basePerUnit, price: basePrice, variationId: 0, ready: !variationField };
 		var syncing = false;
+		// Area the shopper typed, kept so a variation switch sizes the same area.
+		var typedArea = 0;
 
 		function pieces() {
 			return parseInt(qty.value, 10) || 0;
@@ -69,10 +74,10 @@
 		function emit() {
 			// Kept on the box too, so scripts that start later can read the current state.
 			box.coverageState = {
-				area: areaFor(pieces(), state.perUnit),
+				area: state.ready ? areaFor(pieces(), state.perUnit) : 0,
 				pieces: pieces(),
 				perUnit: state.perUnit,
-				price: state.price,
+				price: state.ready ? state.price : null,
 				productId: parseInt(box.dataset.productId, 10) || 0,
 				variationId: state.variationId
 			};
@@ -83,13 +88,17 @@
 			if (syncing) {
 				return;
 			}
+			if (!state.ready) {
+				emit();
+				return;
+			}
 			var area = areaFor(pieces(), state.perUnit);
 			input.value = area > 0 ? formatArea(area) : '';
 			emit();
 		}
 
 		function fromArea(normalize) {
-			var p = piecesFor(parse(input.value), state.perUnit);
+			var p = piecesFor(typedArea, state.perUnit);
 			if (p > 0) {
 				syncing = true;
 				qty.value = String(p);
@@ -108,21 +117,35 @@
 			var id = field ? parseInt(field.value, 10) || 0 : 0;
 			var v = id ? variations[id] : null;
 			state.variationId = id;
+			state.ready = id > 0;
 			state.perUnit = v && v.u > 0 ? v.u : basePerUnit;
 			state.price = v && v.p !== null ? v.p : basePrice;
 			box.hidden = !(state.perUnit > 0);
 			if (perUnitLabel) {
 				perUnitLabel.textContent = formatPerUnit(state.perUnit);
 			}
-			fromQuantity();
+			if (!state.ready) {
+				input.value = typedArea > 0 ? formatArea(typedArea) : '';
+			}
+			if (state.ready && typedArea > 0) {
+				fromArea(true);
+			} else {
+				fromQuantity();
+			}
 		}
 
-		input.addEventListener('input', function () { fromArea(false); });
-		input.addEventListener('change', function () { fromArea(true); });
-		qty.addEventListener('input', fromQuantity);
-		qty.addEventListener('change', fromQuantity);
+		input.addEventListener('input', function () { typedArea = parse(input.value); fromArea(false); });
+		input.addEventListener('change', function () { typedArea = parse(input.value) || typedArea; fromArea(true); });
+		// A pieces change by the shopper (typing or +/- buttons) replaces the typed area.
+		function onQuantity() {
+			if (!syncing) {
+				typedArea = 0;
+			}
+			fromQuantity();
+		}
+		qty.addEventListener('input', onQuantity);
+		qty.addEventListener('change', onQuantity);
 
-		var variationField = form.querySelector('input[name="variation_id"]');
 		if (variationField) {
 			// WooCommerce sets the variation with jQuery .val().trigger('change'),
 			// which runs inline on* handlers but not addEventListener listeners.

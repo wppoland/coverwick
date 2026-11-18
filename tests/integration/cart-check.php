@@ -87,6 +87,21 @@ update_post_meta($varA->get_id(), '_sale_price_dates_from', time() - HOUR_IN_SEC
 wc_scheduled_sales();
 $coverage_check('scheduled sale start resyncs parent', $coverage_meta($variable->get_id()) === '200.00', $coverage_meta($variable->get_id()));
 
+// Trashing, restoring and deleting a variation resync the parent. Lowest now B 263.16, A 200 on sale.
+wp_trash_post($varA->get_id());
+$coverage_check('trashed variation resyncs parent', $coverage_meta($variable->get_id()) === '263.16', $coverage_meta($variable->get_id()));
+wp_untrash_post($varA->get_id());
+wp_publish_post($varA->get_id());
+$coverage_check('restored variation resyncs parent', $coverage_meta($variable->get_id()) === '200.00', $coverage_meta($variable->get_id()));
+$varC = new WC_Product_Variation();
+$varC->set_parent_id($variable->get_id());
+$varC->set_attributes(['colour' => '']);
+$varC->set_regular_price('38');
+$varC->save();
+$coverage_check('new cheaper variation resyncs parent', $coverage_meta($variable->get_id()) === '50.00', $coverage_meta($variable->get_id()));
+$varC->delete(true);
+$coverage_check('deleted variation resyncs parent', $coverage_meta($variable->get_id()) === '200.00', $coverage_meta($variable->get_id()));
+
 // No coverage: meta removed.
 $plain = new WC_Product_Simple();
 $plain->set_name('Check plain');
@@ -117,6 +132,13 @@ $coverage_check('same sample twice refused', ! $samples->add($simple->get_id()))
 $coverage_check('variable sample without variation refused', ! $samples->add($variable->get_id()));
 $coverage_check('variable sample with variation added', $samples->add($variable->get_id(), $varA->get_id()));
 $coverage_check('sample limit enforced', ! $samples->add($variable->get_id(), $varB->get_id()));
+$draft = new WC_Product_Simple();
+$draft->set_name('Check draft');
+$draft->set_status('draft');
+$draft->update_meta_data(Area::META_SAMPLE, 'yes');
+$draft->save();
+$coverage_check('sample of unpublished product refused', ! $samples->add($draft->get_id()));
+$draft->delete(true);
 $coverage_check('direct add of internal product refused', ! apply_filters('woocommerce_add_to_cart_validation', true, $sampleProduct->id(), 1));
 wc_clear_notices();
 
@@ -129,6 +151,25 @@ $coverage_check('sample line gets the sample shipping class', $coverage_class > 
 $coverage_check('sample line has no area', CartArea::areaOf($lines[0]) === 0.0);
 $attrData = apply_filters('woocommerce_get_item_data', [], $lines[1]);
 $coverage_check('variant sample shows attribute', in_array('Graphite', array_column($attrData, 'value'), true), (string) wp_json_encode($attrData));
+
+// "Any" variation: the shopper's value must be one of the parent's options.
+update_option(Settings::OPTION, ['unit' => 'm2', 'samples_enabled' => true, 'sample_price' => '4', 'sample_max' => 5, 'sample_shipping_class' => $coverage_class]);
+$settings->flush();
+$varAny = new WC_Product_Variation();
+$varAny->set_parent_id($variable->get_id());
+$varAny->set_attributes(['colour' => '']);
+$varAny->set_regular_price('300');
+$varAny->save();
+$coverage_check('any variation with invented value refused', ! $samples->add($variable->get_id(), $varAny->get_id(), ['attribute_colour' => 'Invented']));
+$coverage_check('any variation without value refused', ! $samples->add($variable->get_id(), $varAny->get_id(), []));
+$coverage_check('any variation with offered value added', $samples->add($variable->get_id(), $varAny->get_id(), ['attribute_colour' => 'Teak']));
+wc_clear_notices();
+
+// Internal product stays out of front-end product queries.
+$found = get_posts(['post_type' => 'product', 'posts_per_page' => -1, 'fields' => 'ids']);
+$coverage_check('internal product excluded from product queries', ! in_array($sampleProduct->id(), $found, true));
+$found = (new WP_Query(['s' => 'internal product', 'fields' => 'ids']))->posts;
+$coverage_check('internal product excluded from search', ! in_array($sampleProduct->id(), $found, true));
 
 // Per product price override.
 $simple = wc_get_product($simple->get_id());
@@ -150,6 +191,9 @@ $board = $byName['Check board simple'] ?? null;
 $coverage_check('order item saves area meta', $board !== null && $board->get_meta(CartArea::ORDER_META) === '9.12', $board !== null ? (string) $board->get_meta(CartArea::ORDER_META) : '');
 $formatted = $board !== null ? wp_list_pluck($board->get_formatted_meta_data(), 'display_key') : [];
 $coverage_check('order item shows Area', in_array('Area', $formatted, true), (string) wp_json_encode($formatted));
+$hiddenMeta = apply_filters('woocommerce_hidden_order_itemmeta', []);
+$rawShown  = $board !== null ? array_diff(wp_list_pluck($board->get_formatted_meta_data(''), 'key'), $hiddenMeta) : [];
+$coverage_check('order screen hides raw area meta', $board !== null && array_values($rawShown) === ['coverage_area'], (string) wp_json_encode(array_values($rawShown)));
 $sampleItem = $byName['Sample: Check board simple'] ?? null;
 $coverage_check('order sample item named and linked to source', $sampleItem !== null && (int) $sampleItem->get_meta('_coverage_sample_source') === $simple->get_id());
 $coverage_check('order sample item does not touch source stock product', $sampleItem !== null && $sampleItem->get_product_id() === $sampleProduct->id());
