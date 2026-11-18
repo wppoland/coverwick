@@ -40,15 +40,15 @@ final class CartArea implements HasHooks
     }
 
     /**
-     * The order screen lists underscore meta too: keep the raw values out, the
-     * readable "Area" row from formattedMeta() stays.
+     * The order screen lists underscore meta too: keep the raw helper values
+     * out. `_coverage_m2` stays, formattedMeta() turns its row into "Area".
      *
      * @param array<int, string> $keys
      * @return array<int, string>
      */
     public function hiddenMeta(array $keys): array
     {
-        return array_merge($keys, [self::ORDER_META, self::ORDER_META_PER, '_coverage_sample_source', '_coverage_sample_variation']);
+        return array_merge($keys, [self::ORDER_META_PER, '_coverage_sample_source', '_coverage_sample_variation']);
     }
 
     /**
@@ -100,7 +100,9 @@ final class CartArea implements HasHooks
 
     /**
      * Hidden meta is skipped by WooCommerce; add a readable "Area" row for
-     * emails, the thank-you page, My Account and the order screen.
+     * emails, the thank-you page, My Account and the order screen. The row is
+     * keyed by the real meta id, so on the order screen it replaces the raw
+     * row and saving the order writes the same `_coverage_m2` value back.
      *
      * @param array<int|string, object> $formatted
      * @return array<int|string, object>
@@ -109,9 +111,15 @@ final class CartArea implements HasHooks
     {
         $area = (float) $item->get_meta(self::ORDER_META, true);
         if ($area > 0) {
-            $formatted['coverage_area'] = (object) [
-                'key'           => 'coverage_area',
-                'value'         => (string) $area,
+            $rowId = 'coverage_area';
+            foreach ($item->get_meta_data() as $meta) {
+                if ($meta->key === self::ORDER_META && $meta->id) {
+                    $rowId = $meta->id;
+                }
+            }
+            $formatted[$rowId] = (object) [
+                'key'           => self::ORDER_META,
+                'value'         => (string) $item->get_meta(self::ORDER_META, true),
                 'display_key'   => __('Area', 'coverage'),
                 'display_value' => esc_html(Format::area($area) . ' ' . $this->settings->unit()),
             ];

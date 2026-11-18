@@ -192,8 +192,26 @@ $coverage_check('order item saves area meta', $board !== null && $board->get_met
 $formatted = $board !== null ? wp_list_pluck($board->get_formatted_meta_data(), 'display_key') : [];
 $coverage_check('order item shows Area', in_array('Area', $formatted, true), (string) wp_json_encode($formatted));
 $hiddenMeta = apply_filters('woocommerce_hidden_order_itemmeta', []);
-$rawShown  = $board !== null ? array_diff(wp_list_pluck($board->get_formatted_meta_data(''), 'key'), $hiddenMeta) : [];
-$coverage_check('order screen hides raw area meta', $board !== null && array_values($rawShown) === ['coverage_area'], (string) wp_json_encode(array_values($rawShown)));
+$adminRows = $board !== null ? array_filter($board->get_formatted_meta_data(''), static fn (object $m): bool => ! in_array($m->key, $hiddenMeta, true)) : [];
+$coverage_check('order screen shows one Area row', count($adminRows) === 1 && current($adminRows)->display_key === 'Area', (string) wp_json_encode(array_values($adminRows)));
+// Saving the order screen posts every shown row back by its array key (the meta id).
+if ($board !== null) {
+    $postedKeys   = [];
+    $postedValues = [];
+    foreach ($adminRows as $metaId => $row) {
+        $postedKeys[$metaId]   = $row->key;
+        $postedValues[$metaId] = $row->value;
+    }
+    require_once WC_ABSPATH . 'includes/admin/wc-admin-functions.php';
+    wc_save_order_items($order->get_id(), [
+        'order_item_id' => [$board->get_id()],
+        'meta_key'      => [$board->get_id() => $postedKeys],
+        'meta_value'    => [$board->get_id() => $postedValues],
+    ]);
+    $saved = WC_Order_Factory::get_order_item($board->get_id());
+    $keys  = wp_list_pluck($saved->get_meta_data(), 'key');
+    $coverage_check('order screen save keeps area meta unchanged', $saved->get_meta(CartArea::ORDER_META) === '9.12' && count(array_keys($keys, CartArea::ORDER_META, true)) === 1 && ! in_array('coverage_area', $keys, true), (string) wp_json_encode($keys));
+}
 $sampleItem = $byName['Sample: Check board simple'] ?? null;
 $coverage_check('order sample item named and linked to source', $sampleItem !== null && (int) $sampleItem->get_meta('_coverage_sample_source') === $simple->get_id());
 $coverage_check('order sample item does not touch source stock product', $sampleItem !== null && $sampleItem->get_product_id() === $sampleProduct->id());

@@ -80,9 +80,11 @@ final class Samples implements HasHooks
      */
     public function displayPrice(\WC_Product $product): float
     {
-        $sample = wc_get_product($this->sampleProduct->id());
+        // Before the first sample exists, an unsaved simple product has the same
+        // default tax status and class, without creating anything on a page view.
+        $sample = wc_get_product($this->sampleProduct->existingId());
 
-        return (float) wc_get_price_to_display($sample instanceof \WC_Product ? $sample : $product, ['price' => $this->priceFor($product)]);
+        return (float) wc_get_price_to_display($sample instanceof \WC_Product ? $sample : new \WC_Product_Simple(), ['price' => $this->priceFor($product)]);
     }
 
     public function renderButton(): void
