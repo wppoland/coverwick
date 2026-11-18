@@ -1,0 +1,8 @@
+.coverage-calc[hidden] { display: none; }
+.coverage-calc { margin: 0 0 1em; }
+.coverage-calc__label { display: block; font-weight: 600; margin-bottom: .25em; }
+.coverage-calc__field { display: inline-flex; align-items: center; gap: .5em; }
+.coverage-calc__area { width: 7em; max-width: 100%; }
+.coverage-calc__hint { margin: .5em 0 0; font-size: .875em; opacity: .85; }
+.coverage-unit-price { display: block; font-size: .8em; font-weight: normal; }
+.coverage-sample { margin: 1em 0; }
