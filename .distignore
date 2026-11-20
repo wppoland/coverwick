@@ -30,3 +30,5 @@
 /playwright-report
 /.playwright-mcp
 /phpunit.xml.dist
+/.shotkit
+/.raw
