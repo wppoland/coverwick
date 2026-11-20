@@ -1,5 +1,8 @@
 # Coverwick
 
+- **Plugin page:** https://plogins.com/coverwick/
+- **Documentation:** https://plogins.com/coverwick/docs/
+
 WooCommerce plugin for products sold by the piece but bought by area (boards, panels, tiles).
 
 - Coverage per unit on the product (General tab) and per variation (`_coverage_m2_per_unit`).
