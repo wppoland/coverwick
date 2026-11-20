@@ -1,6 +1,6 @@
 <?php
 /**
- * Uninstall cleanup for Coverage Calculator.
+ * Uninstall cleanup for Coverwick.
  *
  * Removes the plugin's options and its hidden internal sample product. Product
  * coverage values, the computed price per area and order item meta are store

@@ -1,10 +1,10 @@
-=== Coverage Calculator ===
+=== Coverwick - Square Meter Calculator and Samples for WooCommerce ===
 Contributors: motylanogha
 Tags: woocommerce, square meters, flooring, samples, calculator
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.1.0
+Stable tag: 0.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Sell boards, panels and tiles by area: linked pieces and square metre inputs, pr
 
 == Description ==
 
-Coverage Calculator is for WooCommerce shops that sell boards, panels or tiles by the piece while customers think in square metres.
+Coverwick is for WooCommerce shops that sell boards, panels or tiles by the piece while customers think in square metres.
 
 = Area calculator on the product page =
 
@@ -46,9 +46,9 @@ Coverage Calculator is for WooCommerce shops that sell boards, panels or tiles b
 
 == Installation ==
 
-1. Upload the plugin to `/wp-content/plugins/coverage`, or install it from Plugins, Add New.
+1. Upload the plugin to `/wp-content/plugins/coverwick`, or install it from Plugins, Add New.
 2. Activate it. WooCommerce must be active.
-3. Go to WooCommerce, Coverage Calculator, to set the area unit and the sample options.
+3. Go to WooCommerce, Coverwick, to set the area unit and the sample options.
 4. On each product, fill in "Coverage per unit" in the General tab (or per variation) and tick "Sample available" where you offer samples.
 
 == Frequently Asked Questions ==
@@ -65,7 +65,7 @@ On the product edit screen, General tab, "Coverage per unit". Variations can set
 
 Always up to a whole piece. 7.6 m2 with 0.76 m2 per board gives exactly 10 boards; 7.7 m2 gives 11.
 
-= What is the product called "Sample (internal product used by Coverage Calculator, do not delete)"? =
+= What is the product called "Sample (internal product used by Coverwick, do not delete)"? =
 
 The hidden product every sample line is sold as. If it is deleted, it is created again the next time a shopper orders a sample. Past orders keep their sample lines.
 
@@ -74,6 +74,9 @@ The hidden product every sample line is sold as. If it is deleted, it is created
 Yes. The area and the sample lines show in both, and sample quantities cannot be changed in the block cart.
 
 == Changelog ==
+
+= 0.1.1 =
+* Changed: the plugin is now called Coverwick. Text domain, main file and folder are `coverwick`. Settings, product and order data, hooks (`coverage/booted`, `coverage:change`) and meta keys (`_coverage_*`) are unchanged, so an existing install keeps its data. A plugin folder named `coverage` must be replaced by `coverwick` and activated again.
 
 = 0.1.0 =
 * Initial release: area calculator linked to the quantity, price per area unit, area in cart, checkout and orders, `_coverage_price_per_m2` product meta, paid samples.

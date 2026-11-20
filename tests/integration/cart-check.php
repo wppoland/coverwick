@@ -4,7 +4,7 @@
  * own products, prints PASS/FAIL per check and exits 1 on any failure.
  *
  * Run inside a throwaway wp-env with WooCommerce and this plugin active:
- *   npx @wordpress/env run cli wp eval-file wp-content/plugins/coverage/tests/integration/cart-check.php
+ *   npx @wordpress/env run cli wp eval-file wp-content/plugins/coverwick/tests/integration/cart-check.php
  *
  * @package Coverage
  */

@@ -1,4 +1,4 @@
-# Coverage Calculator
+# Coverwick
 
 WooCommerce plugin for products sold by the piece but bought by area (boards, panels, tiles).
 

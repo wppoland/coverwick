@@ -39,27 +39,27 @@ final class ProductFields implements HasHooks
         woocommerce_wp_text_input([
             'id'          => Area::META_PER_UNIT,
             /* translators: %s: area unit, e.g. m2 */
-            'label'       => sprintf(__('Coverage per unit (%s)', 'coverage'), $this->settings->unit()),
-            'description' => __('Area one sellable unit covers, e.g. 0.76 for a board. Variations without their own value use this one. Leave empty to turn the calculator off.', 'coverage'),
+            'label'       => sprintf(__('Coverage per unit (%s)', 'coverwick'), $this->settings->unit()),
+            'description' => __('Area one sellable unit covers, e.g. 0.76 for a board. Variations without their own value use this one. Leave empty to turn the calculator off.', 'coverwick'),
             'desc_tip'    => true,
             'data_type'   => 'decimal',
         ]);
 
         woocommerce_wp_checkbox([
             'id'          => Area::META_SAMPLE,
-            'label'       => __('Sample available', 'coverage'),
-            'description' => __('Show an "Order a sample" button on the product page.', 'coverage'),
+            'label'       => __('Sample available', 'coverwick'),
+            'description' => __('Show an "Order a sample" button on the product page.', 'coverwick'),
         ]);
 
         woocommerce_wp_text_input([
             'id'          => Area::META_SAMPLE_PRICE,
             'label'       => sprintf(
                 /* translators: %s: currency symbol */
-                __('Sample price (%s)', 'coverage'),
+                __('Sample price (%s)', 'coverwick'),
                 get_woocommerce_currency_symbol(),
             ),
             'placeholder' => wc_format_localized_price((string) $this->settings->samplePrice()),
-            'description' => __('Leave empty to use the default sample price from the plugin settings.', 'coverage'),
+            'description' => __('Leave empty to use the default sample price from the plugin settings.', 'coverwick'),
             'desc_tip'    => true,
             'data_type'   => 'price',
         ]);
@@ -98,10 +98,10 @@ final class ProductFields implements HasHooks
             'name'          => 'coverage_per_unit[' . $loop . ']',
             'value'         => is_scalar($value) ? wc_format_localized_decimal((string) $value) : '',
             /* translators: %s: area unit, e.g. m2 */
-            'label'         => sprintf(__('Coverage per unit (%s)', 'coverage'), $this->settings->unit()),
-            'placeholder'   => __('Same as parent', 'coverage'),
+            'label'         => sprintf(__('Coverage per unit (%s)', 'coverwick'), $this->settings->unit()),
+            'placeholder'   => __('Same as parent', 'coverwick'),
             'desc_tip'      => true,
-            'description'   => __('Area one unit of this variation covers. Empty uses the value from the General tab.', 'coverage'),
+            'description'   => __('Area one unit of this variation covers. Empty uses the value from the General tab.', 'coverwick'),
             'data_type'     => 'decimal',
             'wrapper_class' => 'form-row form-row-full',
         ]);

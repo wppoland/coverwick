@@ -21,7 +21,7 @@ namespace {
 
 namespace Coverage {
     if (! defined('Coverage\\VERSION')) {
-        define('Coverage\\VERSION', '0.1.0');
+        define('Coverage\\VERSION', '0.1.1');
     }
     if (! defined('Coverage\\PLUGIN_FILE')) {
         define('Coverage\\PLUGIN_FILE', '/tmp/coverage/coverage.php');

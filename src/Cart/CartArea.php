@@ -78,7 +78,7 @@ final class CartArea implements HasHooks
         $area = self::areaOf($cartItem);
         if ($area > 0) {
             $itemData[] = [
-                'key'   => __('Area', 'coverage'),
+                'key'   => __('Area', 'coverwick'),
                 'value' => Format::area($area) . ' ' . $this->settings->unit(),
             ];
         }
@@ -120,7 +120,7 @@ final class CartArea implements HasHooks
             $formatted[$rowId] = (object) [
                 'key'           => self::ORDER_META,
                 'value'         => (string) $item->get_meta(self::ORDER_META, true),
-                'display_key'   => __('Area', 'coverage'),
+                'display_key'   => __('Area', 'coverwick'),
                 'display_value' => esc_html(Format::area($area) . ' ' . $this->settings->unit()),
             ];
         }
