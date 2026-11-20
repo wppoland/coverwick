@@ -99,7 +99,7 @@ final class Samples implements HasHooks
 
         $label = sprintf(
             /* translators: %s: formatted sample price, e.g. 4,00 zl */
-            __('Order a sample of this colour (%s)', 'coverage'),
+            __('Order a sample of this colour (%s)', 'coverwick'),
             wc_price($this->displayPrice($product)),
         );
         ?>
@@ -152,7 +152,7 @@ final class Samples implements HasHooks
     {
         $source = wc_get_product($sourceId);
         if (! $source instanceof \WC_Product || $source->get_parent_id() > 0 || ! $this->available($source)) {
-            wc_add_notice(__('Samples are not available for this product.', 'coverage'), 'error');
+            wc_add_notice(__('Samples are not available for this product.', 'coverwick'), 'error');
             return false;
         }
 
@@ -163,7 +163,7 @@ final class Samples implements HasHooks
                 ? Area::variationAttributes($variation, $postedAttributes)
                 : null;
             if ($attributes === null) {
-                wc_add_notice(__('Choose the product options first, then order a sample of that variant.', 'coverage'), 'error');
+                wc_add_notice(__('Choose the product options first, then order a sample of that variant.', 'coverwick'), 'error');
                 return false;
             }
         } else {
@@ -173,7 +173,7 @@ final class Samples implements HasHooks
         $lines = $this->lines();
         foreach ($lines as $line) {
             if ((int) $line['source'] === $sourceId && (int) $line['variation'] === $variationId && ($line['attributes'] ?? []) === $attributes) {
-                wc_add_notice(__('A sample of this product is already in your cart.', 'coverage'), 'notice');
+                wc_add_notice(__('A sample of this product is already in your cart.', 'coverwick'), 'notice');
                 return false;
             }
         }
@@ -205,9 +205,9 @@ final class Samples implements HasHooks
         wc_add_notice(sprintf(
             '<a href="%1$s" tabindex="1" class="button wc-forward">%2$s</a> %3$s',
             esc_url(wc_get_cart_url()),
-            esc_html__('View cart', 'coverage'),
+            esc_html__('View cart', 'coverwick'),
             /* translators: %s: product name */
-            esc_html(sprintf(__('A sample of "%s" has been added to your cart.', 'coverage'), $source->get_name())),
+            esc_html(sprintf(__('A sample of "%s" has been added to your cart.', 'coverwick'), $source->get_name())),
         ), 'success');
 
         return true;
@@ -220,7 +220,7 @@ final class Samples implements HasHooks
     public function blockDirectAdd(bool $passed, int $productId): bool
     {
         if ($passed && ! $this->adding && $this->sampleProduct->isSample($productId)) {
-            wc_add_notice(__('Samples can only be ordered from a product page.', 'coverage'), 'error');
+            wc_add_notice(__('Samples can only be ordered from a product page.', 'coverwick'), 'error');
             return false;
         }
 
@@ -246,7 +246,7 @@ final class Samples implements HasHooks
         $price     = (string) $this->priceFor($source);
 
         /* translators: %s: product name */
-        $data->set_name(sprintf(__('Sample: %s', 'coverage'), $source->get_name()));
+        $data->set_name(sprintf(__('Sample: %s', 'coverwick'), $source->get_name()));
         $data->set_regular_price($price);
         $data->set_price($price);
         $data->set_sold_individually(true);
@@ -403,7 +403,7 @@ final class Samples implements HasHooks
     {
         return sprintf(
             /* translators: %d: maximum number of samples per order */
-            _n('You can order up to %d sample per order.', 'You can order up to %d samples per order.', $this->settings->sampleMax(), 'coverage'),
+            _n('You can order up to %d sample per order.', 'You can order up to %d samples per order.', $this->settings->sampleMax(), 'coverwick'),
             $this->settings->sampleMax(),
         );
     }

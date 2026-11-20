@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name:       Coverage Calculator
- * Plugin URI:        https://plogins.com/coverage/
+ * Plugin Name:       Coverwick - Square Meter Calculator and Samples for WooCommerce
+ * Plugin URI:        https://plogins.com/coverwick/
  * Description:       Sell boards, panels and tiles by area: linked pieces and square metre inputs, price per square metre and paid samples.
- * Version:           0.1.0
+ * Version:           0.1.1
  * Requires at least: 6.5
  * Requires PHP:      8.1
  * Requires Plugins:  woocommerce
@@ -11,7 +11,7 @@
  * Author URI:        https://plogins.com/
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       coverage
+ * Text Domain:       coverwick
  * Domain Path:       /languages
  * WC requires at least: 8.0
  *
@@ -24,7 +24,7 @@ namespace Coverage;
 
 defined('ABSPATH') || exit;
 
-const VERSION     = '0.1.0';
+const VERSION     = '0.1.1';
 const PLUGIN_FILE = __FILE__;
 
 define('COVERAGE_DIR', plugin_dir_path(__FILE__));
@@ -44,7 +44,7 @@ add_action('plugins_loaded', static function (): void {
     if (! class_exists('WooCommerce')) {
         add_action('admin_notices', static function (): void {
             echo '<div class="notice notice-error"><p>';
-            echo esc_html__('Coverage Calculator requires WooCommerce to be active.', 'coverage');
+            echo esc_html__('Coverwick requires WooCommerce to be active.', 'coverwick');
             echo '</p></div>';
         });
         return;

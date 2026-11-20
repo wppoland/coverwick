@@ -81,7 +81,7 @@ final class ProductPage implements HasHooks
             data-price="<?php echo esc_attr((string) ($this->displayPrice($product) ?? '')); ?>"
             data-variations="<?php echo esc_attr((string) wp_json_encode((object) $variations)); ?>"
             <?php echo $perUnit > 0 ? '' : 'hidden'; ?>>
-            <label class="coverage-calc__label" for="<?php echo esc_attr($id); ?>"><?php esc_html_e('Area', 'coverage'); ?></label>
+            <label class="coverage-calc__label" for="<?php echo esc_attr($id); ?>"><?php esc_html_e('Area', 'coverwick'); ?></label>
             <span class="coverage-calc__field">
                 <input type="text" inputmode="decimal" autocomplete="off" class="input-text coverage-calc__area" id="<?php echo esc_attr($id); ?>" />
                 <span class="coverage-calc__unit"><?php echo esc_html($this->settings->unit()); ?></span>
@@ -90,7 +90,7 @@ final class ProductPage implements HasHooks
                 <?php
                 printf(
                     /* translators: 1: area one piece covers, e.g. 0,76 2: area unit, e.g. m2 */
-                    esc_html__('1 pc = %1$s %2$s. Enter the number of pieces or the area, the other value is calculated. Area is rounded up to a whole piece.', 'coverage'),
+                    esc_html__('1 pc = %1$s %2$s. Enter the number of pieces or the area, the other value is calculated. Area is rounded up to a whole piece.', 'coverwick'),
                     '<span class="coverage-calc__per-unit">' . esc_html(Format::perUnit($perUnit)) . '</span>',
                     esc_html($this->settings->unit()),
                 );
@@ -117,9 +117,9 @@ final class ProductPage implements HasHooks
 
         $label = $product->is_type('variable')
             /* translators: 1: formatted price, 2: area unit, e.g. m2 */
-            ? __('from %1$s / %2$s', 'coverage')
+            ? __('from %1$s / %2$s', 'coverwick')
             /* translators: 1: formatted price, 2: area unit, e.g. m2 */
-            : __('%1$s / %2$s', 'coverage');
+            : __('%1$s / %2$s', 'coverwick');
 
         return $html . ' <span class="coverage-unit-price">' . sprintf(esc_html($label), wc_price($value), esc_html($this->settings->unit())) . '</span>';
     }

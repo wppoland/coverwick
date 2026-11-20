@@ -66,7 +66,7 @@ final class SampleProduct implements HasHooks
         }
 
         $product = new \WC_Product_Simple();
-        $product->set_name(__('Sample (internal product used by Coverage Calculator, do not delete)', 'coverage'));
+        $product->set_name(__('Sample (internal product used by Coverwick, do not delete)', 'coverwick'));
         $product->set_status('publish');
         $product->set_catalog_visibility('hidden');
         $product->set_regular_price(wc_format_decimal($this->settings->samplePrice()));
