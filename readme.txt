@@ -4,7 +4,7 @@ Tags: woocommerce, square meters, flooring, samples, calculator
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.1.1
+Stable tag: 0.1.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,31 @@ Coverwick is for WooCommerce shops that sell boards, panels or tiles by the piec
 * PHP: the `coverage/booted` action fires after the plugin has booted.
 * JavaScript: the calculator box dispatches a bubbling `coverage:change` event with `{ area, pieces, perUnit, price, productId, variationId }`.
 
+== Coverwick Pro ==
+
+Coverwick Pro is a separate paid plugin that extends Coverwick.
+
+Included in Coverwick:
+
+* Square metres to pieces and back
+* Rounded up
+* Coverage per variation
+* Price per m2
+* Area in cart and orders
+
+Coverwick Pro adds:
+
+* Complete the set box
+* Quantities in packs
+* Live recalculation
+* The whole set in one click
+
+The free edition is not a trial and its features stay available without a time limit.
+
+* **Coverwick Pro** - [plogins.com/coverwick-pro/](https://plogins.com/coverwick-pro/)
+* **Compare editions and pricing** - [plogins.com/coverwick-pro/pricing/](https://plogins.com/coverwick-pro/pricing/)
+* **PRO documentation** - [plogins.com/coverwick-pro/docs/](https://plogins.com/coverwick-pro/docs/)
+
 == Installation ==
 
 1. Upload the plugin to `/wp-content/plugins/coverwick`, or install it from Plugins, Add New.
@@ -74,6 +99,9 @@ The hidden product every sample line is sold as. If it is deleted, it is created
 Yes. The area and the sample lines show in both, and sample quantities cannot be changed in the block cart.
 
 == Changelog ==
+
+= 0.1.2 =
+* Docs: the readme describes Coverwick Pro and links its pricing page.
 
 = 0.1.1 =
 * Changed: the plugin is now called Coverwick. Text domain, main file and folder are `coverwick`. Settings, product and order data, hooks (`coverage/booted`, `coverage:change`) and meta keys (`_coverage_*`) are unchanged, so an existing install keeps its data. A plugin folder named `coverage` must be replaced by `coverwick` and activated again.
