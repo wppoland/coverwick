@@ -1,0 +1,245 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: coverwick\n"
+"Language: pl_PL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Domain: coverwick\n"
+
+#. Plugin Name of the plugin
+#: coverwick.php
+msgid "Coverwick - Square Meter Calculator and Samples for WooCommerce"
+msgstr "Coverwick: kalkulator metrów kwadratowych i próbki dla WooCommerce"
+
+#. Plugin URI of the plugin
+#: coverwick.php
+msgid "https://plogins.com/coverwick/"
+msgstr "https://plogins.com/coverwick/"
+
+#. Description of the plugin
+#: coverwick.php
+msgid ""
+"Sell boards, panels and tiles by area: linked pieces and square metre "
+"inputs, price per square metre and paid samples."
+msgstr ""
+"Sprzedaż desek, paneli i płytek na powierzchnię: powiązane pola sztuk i "
+"metrów kwadratowych, cena za metr kwadratowy i płatne próbki."
+
+#. Author of the plugin
+#: coverwick.php
+msgid "WPPoland"
+msgstr "WPPoland"
+
+#. Author URI of the plugin
+#: coverwick.php
+msgid "https://plogins.com/"
+msgstr "https://plogins.com/"
+
+#: coverwick.php:47
+msgid "Coverwick requires WooCommerce to be active."
+msgstr "Coverwick wymaga aktywnego WooCommerce."
+
+#. translators: %s: area unit, e.g. m2
+#: src/Admin/ProductFields.php:42 src/Admin/ProductFields.php:101
+#, php-format
+msgid "Coverage per unit (%s)"
+msgstr "Powierzchnia jednej sztuki (%s)"
+
+#: src/Admin/ProductFields.php:43
+msgid ""
+"Area one sellable unit covers, e.g. 0.76 for a board. Variations without "
+"their own value use this one. Leave empty to turn the calculator off."
+msgstr ""
+"Powierzchnia, którą pokrywa jedna sprzedawana sztuka, np. 0,76 dla deski. "
+"Warianty bez własnej wartości używają tej. Puste pole wyłącza kalkulator."
+
+#: src/Admin/ProductFields.php:50
+msgid "Sample available"
+msgstr "Próbka dostępna"
+
+#: src/Admin/ProductFields.php:51
+msgid "Show an \"Order a sample\" button on the product page."
+msgstr "Pokaż przycisk „Zamów próbkę” na stronie produktu."
+
+#. translators: %s: currency symbol
+#: src/Admin/ProductFields.php:58
+#, php-format
+msgid "Sample price (%s)"
+msgstr "Cena próbki (%s)"
+
+#: src/Admin/ProductFields.php:62
+msgid "Leave empty to use the default sample price from the plugin settings."
+msgstr "Puste pole oznacza domyślną cenę próbki z ustawień wtyczki."
+
+#: src/Admin/ProductFields.php:102
+msgid "Same as parent"
+msgstr "Jak w produkcie głównym"
+
+#: src/Admin/ProductFields.php:104
+msgid ""
+"Area one unit of this variation covers. Empty uses the value from the "
+"General tab."
+msgstr ""
+"Powierzchnia jednej sztuki tego wariantu. Puste pole oznacza wartość z "
+"zakładki Ogólne."
+
+#: src/Admin/SettingsPage.php:35 src/Admin/SettingsPage.php:36
+msgid "Coverwick"
+msgstr "Coverwick"
+
+#: src/Admin/SettingsPage.php:50
+msgid "Settings"
+msgstr "Ustawienia"
+
+#: src/Admin/SettingsPage.php:97
+msgid ""
+"Products with a coverage value get linked pieces and area inputs, a price "
+"per area unit and optional paid samples. Set the coverage per unit on each "
+"product, in the General tab or per variation."
+msgstr ""
+"Produkty z ustawioną powierzchnią dostają powiązane pola sztuk i "
+"powierzchni, cenę za jednostkę powierzchni i opcjonalnie płatne próbki. "
+"Powierzchnię jednej sztuki ustawiasz w produkcie, w zakładce Ogólne albo w "
+"wariancie."
+
+#: src/Admin/SettingsPage.php:102
+msgid "Calculator"
+msgstr "Kalkulator"
+
+#: src/Admin/SettingsPage.php:105
+msgid "Area unit"
+msgstr "Jednostka powierzchni"
+
+#: src/Admin/SettingsPage.php:108
+msgid ""
+"Shown next to area values. A trailing 2 or 3 is displayed as a superscript."
+msgstr ""
+"Wyświetlana przy powierzchni. Końcowa cyfra 2 lub 3 jest pokazywana w "
+"indeksie górnym."
+
+#: src/Admin/SettingsPage.php:113
+msgid "Paid samples"
+msgstr "Płatne próbki"
+
+#: src/Admin/SettingsPage.php:116
+msgid "Enable samples"
+msgstr "Włącz próbki"
+
+#: src/Admin/SettingsPage.php:120
+msgid "Show the sample button on products marked \"Sample available\"."
+msgstr ""
+"Pokaż przycisk próbki przy produktach z zaznaczoną opcją „Próbka dostępna”."
+
+#: src/Admin/SettingsPage.php:125
+msgid "Default sample price"
+msgstr "Domyślna cena próbki"
+
+#: src/Admin/SettingsPage.php:129
+msgid "Used when a product does not set its own sample price."
+msgstr "Używana, gdy produkt nie ma własnej ceny próbki."
+
+#: src/Admin/SettingsPage.php:133
+msgid "Samples per order"
+msgstr "Próbek w zamówieniu"
+
+#: src/Admin/SettingsPage.php:136
+msgid ""
+"Maximum number of sample lines in one cart. Each product (and variation) can"
+" be sampled once."
+msgstr ""
+"Maksymalna liczba próbek w jednym koszyku. Każdy produkt (i wariant) można "
+"zamówić jako próbkę raz."
+
+#: src/Admin/SettingsPage.php:140
+msgid "Sample shipping class"
+msgstr "Klasa wysyłkowa próbek"
+
+#: src/Admin/SettingsPage.php:143
+msgid "No shipping class"
+msgstr "Brak klasy wysyłkowej"
+
+#: src/Admin/SettingsPage.php:148
+msgid ""
+"Applied to sample lines in the cart, e.g. a cheap letter or parcel rate."
+msgstr "Przypisywana próbkom w koszyku, np. tani list albo paczka."
+
+#: src/Cart/CartArea.php:81 src/Cart/CartArea.php:123
+#: src/Frontend/ProductPage.php:84
+msgid "Area"
+msgstr "Powierzchnia"
+
+#. translators: 1: area one piece covers, e.g. 0,76 2: area unit, e.g. m2
+#: src/Frontend/ProductPage.php:93
+#, php-format
+msgid ""
+"1 pc = %1$s %2$s. Enter the number of pieces or the area, the other value is"
+" calculated. Area is rounded up to a whole piece."
+msgstr ""
+"1 szt. = %1$s %2$s. Wpisz liczbę sztuk albo powierzchnię, druga wartość "
+"policzy się sama. Powierzchnia jest zaokrąglana w górę do pełnej sztuki."
+
+#. translators: 1: formatted price, 2: area unit, e.g. m2
+#: src/Frontend/ProductPage.php:120
+#, php-format
+msgid "from %1$s / %2$s"
+msgstr "od %1$s / %2$s"
+
+#. translators: 1: formatted price, 2: area unit, e.g. m2
+#: src/Frontend/ProductPage.php:122
+#, php-format
+msgid "%1$s / %2$s"
+msgstr "%1$s / %2$s"
+
+#: src/Sample/SampleProduct.php:69
+msgid "Sample (internal product used by Coverwick, do not delete)"
+msgstr "Próbka (produkt wewnętrzny Coverwick, nie usuwaj)"
+
+#. translators: %s: formatted sample price, e.g. 4,00 zl
+#: src/Sample/Samples.php:102
+#, php-format
+msgid "Order a sample of this colour (%s)"
+msgstr "Zamów próbkę tego koloru (%s)"
+
+#: src/Sample/Samples.php:155
+msgid "Samples are not available for this product."
+msgstr "Próbki tego produktu są niedostępne."
+
+#: src/Sample/Samples.php:166
+msgid "Choose the product options first, then order a sample of that variant."
+msgstr "Najpierw wybierz opcje produktu, potem zamów próbkę tego wariantu."
+
+#: src/Sample/Samples.php:177
+msgid "A sample of this product is already in your cart."
+msgstr "Próbka tego produktu jest już w koszyku."
+
+#: src/Sample/Samples.php:209
+msgid "View cart"
+msgstr "Zobacz koszyk"
+
+#. translators: %s: product name
+#: src/Sample/Samples.php:211
+#, php-format
+msgid "A sample of \"%s\" has been added to your cart."
+msgstr "Próbka „%s” została dodana do koszyka."
+
+#: src/Sample/Samples.php:224
+msgid "Samples can only be ordered from a product page."
+msgstr "Próbki można zamawiać tylko ze strony produktu."
+
+#. translators: %s: product name
+#: src/Sample/Samples.php:250
+#, php-format
+msgid "Sample: %s"
+msgstr "Próbka: %s"
+
+#. translators: %d: maximum number of samples per order
+#: src/Sample/Samples.php:429
+#, php-format
+msgid "You can order up to %d sample per order."
+msgid_plural "You can order up to %d samples per order."
+msgstr[0] "Możesz zamówić maksymalnie %d próbkę."
+msgstr[1] "Możesz zamówić maksymalnie %d próbki."
+msgstr[2] "Możesz zamówić maksymalnie %d próbek."
