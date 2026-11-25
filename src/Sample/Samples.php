@@ -171,8 +171,9 @@ final class Samples implements HasHooks
         }
 
         $lines = $this->lines();
+        $key   = $this->sampleKey($sourceId, $variationId, $attributes);
         foreach ($lines as $line) {
-            if ((int) $line['source'] === $sourceId && (int) $line['variation'] === $variationId && ($line['attributes'] ?? []) === $attributes) {
+            if ($this->sampleKey((int) $line['source'], (int) $line['variation'], (array) ($line['attributes'] ?? [])) === $key) {
                 wc_add_notice(__('A sample of this product is already in your cart.', 'coverwick'), 'notice');
                 return false;
             }
@@ -397,6 +398,28 @@ final class Samples implements HasHooks
         $parent = wc_get_product($product->get_parent_id());
 
         return $parent instanceof \WC_Product ? $parent : null;
+    }
+
+    /**
+     * Two samples with the same key count as one: the cart takes the first and
+     * refuses the second. Default key: product, variation and attributes.
+     *
+     * @param array<string, string> $attributes
+     */
+    private function sampleKey(int $sourceId, int $variationId, array $attributes): string
+    {
+        $key = $sourceId . ':' . $variationId . ':' . (string) wp_json_encode($attributes);
+
+        /**
+         * Key that makes two samples the same one, e.g. one sample per colour
+         * across products that differ only in length.
+         *
+         * @param string                $key         Default key.
+         * @param int                   $sourceId    Product the sample is of.
+         * @param int                   $variationId Variation id, 0 for a simple product.
+         * @param array<string, string> $attributes  Variation attributes.
+         */
+        return (string) apply_filters('coverage/sample/key', $key, $sourceId, $variationId, $attributes);
     }
 
     private function limitMessage(): string

@@ -4,7 +4,7 @@ Tags: woocommerce, square meters, flooring, samples, calculator
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.1.2
+Stable tag: 0.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,6 +42,7 @@ Coverwick is for WooCommerce shops that sell boards, panels or tiles by the piec
 = For developers =
 
 * PHP: the `coverage/booted` action fires after the plugin has booted.
+* PHP: the `coverage/sample/key` filter decides which samples count as the same one (default: product, variation and attributes), e.g. one sample per colour across lengths.
 * JavaScript: the calculator box dispatches a bubbling `coverage:change` event with `{ area, pieces, perUnit, price, productId, variationId }`.
 
 == Coverwick Pro ==
@@ -99,6 +100,10 @@ The hidden product every sample line is sold as. If it is deleted, it is created
 Yes. The area and the sample lines show in both, and sample quantities cannot be changed in the block cart.
 
 == Changelog ==
+
+= 0.2.0 =
+* Added: Polish translation.
+* Added: the `coverage/sample/key` filter decides which samples count as the same one, so a shop can allow one sample per colour across products that differ only in length.
 
 = 0.1.2 =
 * Docs: the readme describes Coverwick Pro and links its pricing page.

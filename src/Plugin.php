@@ -39,6 +39,9 @@ final class Plugin
         }
         $this->booted = true;
 
+        // Bundled translations (languages/), used until wp.org language packs exist.
+        load_plugin_textdomain('coverwick', false, dirname(plugin_basename(PLUGIN_FILE)) . '/languages');
+
         $this->container->get(Migrator::class)->maybeMigrate();
 
         /** @var array<class-string<HasHooks>> $hooks */
