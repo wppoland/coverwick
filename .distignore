@@ -32,3 +32,5 @@
 /phpunit.xml.dist
 /.shotkit
 /.raw
+/languages/*.po
+/languages/*.mo
